@@ -1,0 +1,105 @@
+.TH BlockDrop 6 "2026-03-22" "1.2" "Game Manual"
+.SH NAME
+BlockDrop \- a color\-matching falling blocks puzzle game
+.SH SYNOPSIS
+.B BlockDrop
+.SH DESCRIPTION
+Blockdrop is a terminal\-based puzzle game built using ncurses.
+The game features falling blocks of various sizes and shapes that must be
+cleared by matching colors with neighboring blocks on a 12x18 grid.
+.PP
+Unlike traditional falling blocks games, BlockDrop uses a unique color\-matching
+mechanic: when a piece lands, any adjacent blocks of the same color (from
+a different piece) are cleared using a flood\-fill algorithm (Not including corners).
+This creates dynamic chain reactions as blocks fall to fill empty spaces.
+.SH GAMEPLAY
+The game is played on a 12x18 grid. Pieces fall from the top of the screen,
+and the player must position and rotate them to create color matches.
+.SS Piece Types
+.TP
+.B Linear 2
+A horizontal or vertical line of 2 blocks.
+.TP
+.B Linear 3
+A horizontal or vertical line of 3 blocks.
+.TP
+.B Square
+A 2x2 square of 4 blocks.
+.TP
+.B L\-Shape
+An L\-shaped piece made of 4 blocks.
+.TP
+.B T\-Shape
+A T\-shaped piece made of 5 blocks.
+.SS Colors
+Pieces are randomly assigned one of five colors:
+.RS
+.IP \(bu 2
+Red
+.IP \(bu 2
+Yellow
+.IP \(bu 2
+Light Blue
+.IP \(bu 2
+Pink
+.IP \(bu 2
+White
+.RE
+.SS Color Matching Mechanic
+When a piece lands, the game checks each block of the newly\-placed piece.
+If any neighboring blocks (above, below, left, or right) have the same color
+but belong to a different piece, those blocks are marked for clearing. The
+matching blocks blink briefly (0.5 seconds) before being removed from the grid.
+.SS Chain Reactions
+After blocks are cleared, individual block gravity is applied: each column
+is scanned from bottom to top, and any floating blocks are pulled down. If a
+falling block lands on a piece of the same color (but different ID), another
+match is triggered. This can create satisfying chain reactions for bonus points!
+.SH CONTROLS
+.TP
+.B Left Arrow
+Move piece left
+.TP
+.B Right Arrow
+Move piece right
+.TP
+.B Down Arrow
+Move piece down faster
+.TP
+.B Up Arrow
+(Restricted \- does nothing)
+.TP
+.B Space
+Rotate piece clockwise 90 degrees
+.TP
+.B Enter
+Start or pause the game
+.TP
+.B Esc
+First press: pause and show exit warning
+.br
+Second press: exit the game
+.SH SCORING
+Players earn 25 points for each block cleared. When blocks clear and cause
+a chain reaction, each block cleared in the chain also earns 10 points.
+.PP
+The game speed increases by 30% for every 500 points scored, making the
+game progressively more challenging.
+.SH HIGH SCORES
+The highest score achieved is saved in a file called
+.B .ntc_highscore
+in the user's home directory. This file is created with mode 0600 (user\-readable
+and writable only) to protect score data.
+.SH AUTHOR
+Jonathan Torres
+.PP
+.SH LICENSE
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+.SH NOTES
+The game requires a terminal with color support for the best experience.
+Ensure your terminal is at least 80x24 characters to display the game
+interface properly.
+.PP
+When running on a Linux TTY (virtual console), the game uses optimized
+screen update routines (erase(), leaveok(), idlok()) to minimize flickering.
+For best performance on TTY, ensure framebuffer support is enabled.
